@@ -1,46 +1,29 @@
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  Easing,
-} from "react-native-reanimated";
-import { View, Button } from "react-native";
+import * as React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ElibRegister from './frontend/src/screens/elib-register';
+import ElibLogin from './frontend/src/screens/elib-login';
+import ElibHome from './frontend/src/screens/elib-home';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ElibProfile from './frontend/src/screens/elib-profile';
+import Tabs from './frontend/src/components/tabs';
 
-export default function AnimatedStyleUpdateExample(props) {
-  const randomWidth = useSharedValue(10);
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-  const config = {
-    duration: 500,
-    easing: Easing.bezier(0.5, 0.01, 0, 1),
-  };
-
-  const style = useAnimatedStyle(() => {
-    return {
-      width: withTiming(randomWidth.value, config),
-    };
-  });
-
+function App() {
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Animated.View
-        style={[
-          { width: 100, height: 80, backgroundColor: "black", margin: 30 },
-          style,
-        ]}
-      />
-      <Button
-        title="toggle"
-        onPress={() => {
-          randomWidth.value = Math.random() * 350;
-        }}
-      />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='ElibLogin' screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="ElibRegister" component={ElibRegister} />
+          <Stack.Screen name="ElibLogin" component={ElibLogin} />
+          <Stack.Screen name="Tabs" component={Tabs} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
+
+export default App;
