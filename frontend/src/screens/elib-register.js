@@ -42,7 +42,7 @@ export default function ElibRegister(){
                         <TextInput placeholder='Password' placeholderTextColor={'gray'} value={Password} onChangeText={setPassword} secureTextEntry/>
                     </Animated.View>
                     <Animated.View  entering={FadeInDown.delay(400).duration(1000).springify()} className='w-full'>
-                        <TouchableOpacity className="w-full bg-green-600 p-3 rounded-2xl mb-3" onPress={()=> navigation.push('HomeP1')}>
+                        <TouchableOpacity className="w-full bg-green-600 p-3 rounded-2xl mb-3" onPress={()=> navigation.push('Tabs')}>
                             <Text  className="text-xl font-bold text-white text-center">
                                     Register
                             </Text>

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ElibHome from '../screens/elib-home';
 import ElibProfile from '../screens/elib-profile';
-import ElibLoan from '../screens/elib-loan';
+import ElibLoanManagement from '../screens/elib-loan-management';
 
 export default function Tabs() {
     const Tab = createBottomTabNavigator();
@@ -34,7 +34,7 @@ export default function Tabs() {
                       iconName = 'home';
                     } else if (route.name === 'ElibProfile') {
                       iconName = 'person';
-                    }else if (route.name === 'ElibLoan') {
+                    }else if (route.name === 'ElibLoanManagement') {
                         iconName = 'bookmarks';
                       }
         
@@ -47,7 +47,7 @@ export default function Tabs() {
         >
             <Tab.Screen name="ElibHome" component={ElibHome} />
             <Tab.Screen name="ElibProfile" component={ElibProfile} />
-            <Tab.Screen name="ElibLoan" component={ElibLoan} />
+            <Tab.Screen name="ElibLoanManagement" component={ElibLoanManagement} />
         </Tab.Navigator>
     );
 }
