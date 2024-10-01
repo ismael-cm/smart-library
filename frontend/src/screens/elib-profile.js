@@ -1,15 +1,13 @@
-import { View, Text, Image, TextInput, TouchableOpacity, TouchableHighlight, ScrollView, FlatList } from 'react-native'
-import React,{useState} from 'react'
+import { View, Text, Image, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut } from 'react-native-reanimated';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import reading from './../assets/images/reading.png';
-
-
-
+import axios from 'axios';
 
 export default function ElibProfile() {
     const navigation = useNavigation();
+    const [user, setUser] = useState(null);
 
     const [books, setBooks] = useState([{
         image: require("./../assets/images/bookbg.png"),
@@ -28,33 +26,47 @@ export default function ElibProfile() {
         id: '3'
     }]);
 
-    const handelBookPress = (item) =>{
+    const handelBookPress = (item) => {
         alert(`Presionaste el libro con nombre: ${item.name}`);
     };
+
+    const getUser = async () => {
+        try {
+            const response = await axios.post('http://192.168.1.7:5000/api/profile', {
+                carnet: "032439"
+            });
+            setUser(response.data.user);  // Accede a los datos correctamente
+        } catch (error) {
+            Alert.alert('Error', error.response ? error.response.data.message : 'Error de red');
+        }
+    };
+
+    // Llama a getUser al montar el componente
+    useEffect(() => {
+        getUser();
+    }, []);
 
     return (
         <View className="bg-white h-full w-full">
             <StatusBar style='dark' />
-            
-            
-            <View className="bg-whitew-full h-full">
-                <Animated.View  entering={FadeInDown.duration(800).springify()} className="flex flex-row h-60 w-full shadow-xl justify-end items-end">
+            <View className="bg-white w-full h-full">
+                <Animated.View entering={FadeInDown.duration(800).springify()} className="flex flex-row h-60 w-full shadow-xl justify-end items-end">
                     <View className="w-1/3 h-32 justify-center items-center">
                         <Text className="text-xl font-semibold">
-                            188
+                            {user ? user.visits : 'Loading...'} {/* Ajusta según la propiedad correcta */}
                         </Text>
                         <Text className="text-xs font-thin">
-                            Followers
+                            Visitas
                         </Text>
                     </View>
                     <View className="w-1/3 h-32 justify-center items-center">
                         <View className='w-28 h-28 rounded-full bg-white shadow-lg'>
-                            <Image  className="rounded-full h-full w-full" source={require('./../assets/images/profile.jpg')} />
+                            <Image className="rounded-full h-full w-full" source={require('./../assets/images/profile.jpg')} />
                         </View>
                     </View>
                     <View className="flex w-1/3 h-32 justify-center items-center">
                         <Text className="text-xl font-semibold">
-                            29
+                            {user ? user.readingCount : 'Loading...'} {/* Ajusta según la propiedad correcta */}
                         </Text>
                         <Text className="text-xs font-thin">
                             Reading
@@ -63,15 +75,19 @@ export default function ElibProfile() {
                 </Animated.View>
                 <View className="w-full h-20 items-center justify-center">
                     <Text className="text-xl font-semibold mb-1">
-                        Fabiana Garcia
+                        {user ? user.name : 'Loading...'} {/* Ajusta según la propiedad correcta */}
                     </Text>
                     <Text className="text-md font-thin">
-                        El Salvador
+                        {user ? user.location : 'Loading...'} {/* Ajusta según la propiedad correcta */}
+                    </Text>
+
+                    <Text className="text-md font-thin">
+                        {user ? user.email : 'Loading...'} {/* Ajusta según la propiedad correcta */}
                     </Text>
                 </View>
                 <View className="w-full h-fit p-2 pr-6 pl-6">
                     <View className="w-full h-32 bg-green-400 rounded-3xl shadow-xl">
-                    
+                        {/* Aquí puedes agregar más información del usuario si es necesario */}
                     </View>
                 </View>
                 <View className="h-fit w-full p-6">
@@ -93,16 +109,14 @@ export default function ElibProfile() {
                             Edna O'Brien
                         </Text>
                         <Text className="text-sm font-semibold text-green-500 left-28 mt-6">
-                            Last Read 2024-03.30
+                            Last Read 2024-03-30
                         </Text>
-                        <View  className="bg-gray-300 left-28 mt-4 w-36 h-2 rounded-xl">
-                            <View  className="bg-green-400 left-0 top-0 rounded-xl h-full w-[60%]">
-
+                        <View className="bg-gray-300 left-28 mt-4 w-36 h-2 rounded-xl">
+                            <View className="bg-green-400 left-0 top-0 rounded-xl h-full w-[60%]">
                             </View>
                         </View>
                     </View>
                     <Image className="rounded-xl h-40 w-32 left-12" source={require("./../assets/images/bookbg.png")} />
-                    
                 </View>
             </View>
         </View>
