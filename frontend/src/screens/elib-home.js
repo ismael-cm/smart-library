@@ -176,7 +176,7 @@ export default function ElibHome() {
                     
                 </View>
                 <View className="w-full h-32 rounded-2xl">
-                    <Text className="font-semibold text-xl">Best Ever Book Lists</Text>
+                    <Text className="font-semibold text-xl">Explora nuevos libros</Text>
                     <View className="w-full h-32 bg-white top-2 rounded-2xl shadow-xl">
                         <Image
                             className="rounded-xl h-full w-full"
