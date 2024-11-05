@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity} from 'react-native'
-import React,  { useState } from 'react'
+import React,  { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import Animated, { FadeIn,FadeInDown,FadeInUp, FadeOut } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
@@ -22,8 +22,9 @@ export default function ElibLogin(){
                 password: Password,
             });
 
+            
             if(response.data.token) {
-                storeToken(response.data.token)
+                await storeToken(response.data.token, response.data.user.name)
                 navigation.push('Tabs')
             }
         } catch (error) {
@@ -35,9 +36,29 @@ export default function ElibLogin(){
 
     }
 
-    const storeToken = async (token) => {
+    useEffect(() => {
+        // Función para obtener los datos almacenados
+        const loadData = async () => {
+            try {
+                const storedEmail = await AsyncStorage.getItem('email');
+
+                if (storedEmail) {
+                    setEmail(storedEmail);
+                }
+            } catch (error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        };
+
+        loadData(); 
+    }, []);
+
+
+    const storeToken = async (token, username) => {
+        console.log(`token ${token}`)
         try {
             await AsyncStorage.setItem('authToken', token);
+            await AsyncStorage.setItem('username', username);
         } catch (error) {
             console.log('Error saving token:', error);
         }

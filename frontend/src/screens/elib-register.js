@@ -5,6 +5,7 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { SERVER_URL } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ElibRegister() {
     const navigation = useNavigation();
@@ -41,7 +42,8 @@ export default function ElibRegister() {
             // Manejar la respuesta exitosa
             if (response.status === 201) {
                 alert('Registro exitoso');
-                navigation.push('Tabs'); // Navega a la pantalla de perfil o cualquier pantalla que prefieras
+                storeUser(response.data.user)
+                navigation.push('ElibLogin')
             }
         } catch (error) {
             // Manejar los errores
@@ -54,6 +56,15 @@ export default function ElibRegister() {
             }
         }
         setLoading(false);
+    };
+
+    const storeUser = async (user) => {
+        try {
+            await AsyncStorage.setItem('username', user.name);
+            await AsyncStorage.setItem('email', user.email);
+        } catch (error) {
+            console.log('Error saving token:', error);
+        }
     };
 
     return (
