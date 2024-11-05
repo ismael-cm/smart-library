@@ -8,6 +8,7 @@ import ElibHome from './frontend/src/screens/elib-home';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ElibProfile from './frontend/src/screens/elib-profile';
 import Tabs from './frontend/src/components/tabs';
+import ElibSearch from './frontend/src/screens/elib-seach';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ function App() {
         <Stack.Navigator initialRouteName='ElibLogin' screenOptions={{ headerShown: false }}>
           <Stack.Screen name="ElibRegister" component={ElibRegister} />
           <Stack.Screen name="ElibLogin" component={ElibLogin} />
+          <Stack.Screen name="ElibSearch" component={ElibSearch} />
           <Stack.Screen name="Tabs" component={Tabs} />
         </Stack.Navigator>
       </NavigationContainer>

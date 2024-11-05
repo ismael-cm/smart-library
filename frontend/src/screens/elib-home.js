@@ -13,39 +13,14 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'; // Asegúrate de tener axios instalado
 import { SERVER_URL } from '@env';
+import { getDefaultImage } from '../components/defaultImages'
 
 
-export default function ElibHome() {
+export default function ElibHome({ navigation }) {
     const [name, setName] = useState('');
     const [token, setToken] = useState('');
     const [genres, setGenres] = useState('');
     const [imageError, setImageError] = useState(false);
-    const defaultImages = [
-      require('./../assets/images/1.jpg'),
-      require('./../assets/images/2.jpg'),
-      require('./../assets/images/3.jpg'),
-      require('./../assets/images/4.jpg'),
-      require('./../assets/images/5.jpg'),
-      require('./../assets/images/6.jpg'),
-      require('./../assets/images/7.jpg'),
-      require('./../assets/images/8.jpg'),
-      require('./../assets/images/9.jpg'),
-      require('./../assets/images/10.jpg'),
-      require('./../assets/images/11.jpg'),
-      require('./../assets/images/12.jpg'),
-      require('./../assets/images/13.jpg'),
-      require('./../assets/images/14.jpg'),
-      require('./../assets/images/15.jpg'),
-      require('./../assets/images/16.jpg'),
-      require('./../assets/images/17.jpg'),
-      require('./../assets/images/18.jpg')
-    ]
-
-    const getDefaultImage = () => {
-      const randomIndex = Math.floor(Math.random() * defaultImages.length);
-      return defaultImages[randomIndex];
-  };
-
     useEffect(() => {
         // Función para obtener los datos almacenados
         const loadData = async () => {
@@ -141,10 +116,12 @@ export default function ElibHome() {
                 </View>
                 <View className="flex flex-row bg-white space-x-6 w-full h-fit p-4 rounded-2xl shadow-md">
                     <Image
+                        onPress={() => navigation.navigate('ElibSearch')}
                         className="h-6 w-6 placeholder-gray-500"
                         source={require('./../assets/images/icons/search.png')}
                     />
                     <TextInput
+                        onPress={() => navigation.navigate('ElibSearch')}
                         className=""
                         placeholder="Search for Books..."
                         placeholderTextColor="#9CA3AF"
