@@ -117,9 +117,12 @@ export default function ElibHome() {
     );
 
     return (
-        <View className="bg-white h-full w-full">
+        <View className="bg-white flex-1 w-full">
             <StatusBar style="dark" />
-            <ScrollView className="bg-gray-100 h-full w-full pl-8 pr-8">
+            <ScrollView 
+                className="bg-gray-100 h-full w-full pl-8 pr-8"
+                contentContainerStyle={{ paddingBottom: 150 }}
+            >
                 <View className="flex flex-row items-end w-full h-48">
                     <View className="w-fit mb-6">
                         <Text className="text-green-400 text-lg font-semibold w-32">
@@ -162,7 +165,7 @@ export default function ElibHome() {
                             data={genre.books}
                             renderItem={renderArrivals}
                             keyExtractor={(item) => item._id}
-                            className=" h-54 mt-1 -left-7"
+                            className=" h-54 mt-1 -left-7 w-[100%]"
                             horizontal
                             contentContainerStyle={{ paddingHorizontal: 5 }}
                         />
