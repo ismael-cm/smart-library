@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ElibHome from '../screens/elib-home';
 import ElibProfile from '../screens/elib-profile';
 import ElibLoanManagement from '../screens/elib-loan-management';
-
+import ElibChat from '../screens/elib-chat.js';
 export default function Tabs() {
     const Tab = createBottomTabNavigator();
     return (
@@ -36,6 +36,8 @@ export default function Tabs() {
                       iconName = 'person';
                     }else if (route.name === 'ElibLoanManagement') {
                         iconName = 'bookmarks';
+                      } else if (route.name === 'ElibChat'){
+                        iconName = 'chatbox';  // Icono para la pestaña de chat
                       }
         
                     return <Icon name={iconName} size={size} color={color} />;
@@ -48,6 +50,8 @@ export default function Tabs() {
             <Tab.Screen name="ElibHome" component={ElibHome} />
             <Tab.Screen name="ElibProfile" component={ElibProfile} />
             <Tab.Screen name="ElibLoanManagement" component={ElibLoanManagement} />
+            <Tab.Screen name="ElibChat" component={ElibChat} />
+
         </Tab.Navigator>
     );
 }
