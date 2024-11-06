@@ -67,9 +67,7 @@ export default function ElibHome({ navigation }) {
         }
     };
 
-    const handleBookPress = (item) => {
-        alert(`Presionaste el libro con nombre: ${item.title}`);
-    };
+
 
     const renderArrivals = ({ item }) => (
         <View className="w-36 h-full p-6 pr-1 pt-0 pb-0 relative">
@@ -86,7 +84,7 @@ export default function ElibHome({ navigation }) {
             </View>
             <TouchableOpacity
                 className="ml-4 w-[115%] h-full absolute"
-                onPress={() => handleBookPress(item)}
+                onPress={() => navigation.navigate('ElibBook', { book: item })}
             ></TouchableOpacity>
         </View>
     );

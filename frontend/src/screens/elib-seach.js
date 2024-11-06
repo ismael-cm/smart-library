@@ -24,6 +24,7 @@ export default function ElibSearch({ navigation }) {
     const [selectedGenre, setSelectedGenre] = useState('');
     const [token, setToken] = useState('');
     const [searchAuthor, setSearchAuthor] = useState('');
+    const [authUser, setAuthUser] = useState({});
 
     const handleImageError = (isbn) => {
         setBooks((prevBooks) =>
