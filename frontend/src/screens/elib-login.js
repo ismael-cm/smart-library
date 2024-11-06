@@ -9,7 +9,7 @@ import { SERVER_URL } from '@env';
 
 export default function ElibLogin() {
     const navigation = useNavigation();
-    const [Email, setEmail] = useState('ana@a.com');
+    const [Email, setEmail] = useState('bea@b.com');
     const [Password, setPassword] = useState('1234');
     const [Errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
