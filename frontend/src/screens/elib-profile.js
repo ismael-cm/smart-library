@@ -4,47 +4,48 @@ import { StatusBar } from 'expo-status-bar';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { SERVER_URL } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function ElibProfile() {
-    const navigation = useNavigation();
+
+export default function ElibProfile({ navigation }) {
     const [user, setUser] = useState(null);
 
-    const [books, setBooks] = useState([{
-        image: require("./../assets/images/bookbg.png"),
-        name: "Girl",
-        description: "Edna O'Brien",
-        id: '1'
-    }, {
-        image: require("./../assets/images/bookbg.png"),
-        name: "Hamnet",
-        description: "Maggie O'Farrel",
-        id: '2'
-    }, {
-        image: require("./../assets/images/bookbg.png"),
-        name: "The Dutch",
-        description: "Ann Patchett",
-        id: '3'
-    }]);
+   
 
-    const handelBookPress = (item) => {
-        alert(`Presionaste el libro con nombre: ${item.name}`);
-    };
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const token = await AsyncStorage.getItem('authToken');
+                console.log(`Token para 22222 ${token}`);
+                await getUser(token);
+            } catch (error) {
+                alert(error.response?.data?.message || 'Error al obtener los datos');
+                console.error('Error al obtener los datos del usuario:', error);
+            }
+        };
+        loadData();
+    }, []);
 
-    const getUser = async () => {
+    const getUser = async (token) => {
         try {
-            const response = await axios.post('http://192.168.1.7:5000/api/profile', {
-                carnet: "032439"
+            const response = await axios.get(`${SERVER_URL}api/profile`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
-            setUser(response.data.user);  // Accede a los datos correctamente
+            if (response.status === 200) {
+                setUser(response.data.user);
+            }
         } catch (error) {
-            Alert.alert('Error', error.response ? error.response.data.message : 'Error de red');
+            alert(error.response?.data?.message || 'Error al obtener los datos del usuario');
+            console.error('Error al obtener los datos del usuario:', error);
         }
     };
 
-    // Llama a getUser al montar el componente
-    useEffect(() => {
-        getUser();
-    }, []);
+    const handleLogout = () => {
+        AsyncStorage.removeItem('authToken');
+        navigation.navigate('ElibLogin');
+    }
 
     return (
         <View className="bg-white h-full w-full">
@@ -84,12 +85,24 @@ export default function ElibProfile() {
                     <Text className="text-md font-thin">
                         {user ? user.email : 'Loading...'} {/* Ajusta según la propiedad correcta */}
                     </Text>
+
+                   
+
                 </View>
                 <View className="w-full h-fit p-2 pr-6 pl-6">
                     <View className="w-full h-32 bg-green-400 rounded-3xl shadow-xl">
                         {/* Aquí puedes agregar más información del usuario si es necesario */}
                     </View>
                 </View>
+
+                <Animated.View  entering={FadeInDown.delay(400).duration(1000).springify()} className='w-full my-2 p-2 h-fit p-2 pr-6 pl-6'>
+                    <TouchableOpacity className="flex flex-row align-center justify-center w-fit bg-red-600 p-3 rounded-2xl mb-3" onPress={handleLogout}>
+                        <Text  className="text-lg font-bold text-white text-center mr-4">
+                            Cerrar Sesión 
+                        </Text>
+                        <Icon  name="logout" size={30} color="white"/>
+                    </TouchableOpacity>
+                </Animated.View>
                 <View className="h-fit w-full p-6">
                     <View className="flex flex-row items-center">
                         <Text className='font-semibold text-lg'>

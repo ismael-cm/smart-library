@@ -89,7 +89,7 @@ export default function ElibSearch({ navigation }) {
 
     const renderBookItem = ({ item }) => (
         <TouchableOpacity
-            onPress={() => navigation.navigate('ElibBook', { book: item })}
+            onPress={() => navigation.navigate('ElibBook', { bookParam: item })}
             className="w-36 h-full p-6 pr-1 pt-0 pb-0 relative"
         >
             <View className="rounded-xl h-40 w-full shadow-xl">

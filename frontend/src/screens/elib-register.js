@@ -112,7 +112,7 @@ export default function ElibRegister() {
 
                             <Animated.View entering={FadeInDown.delay(600).duration(1000).springify()} className="flex-row justify-center">
                                 <Text className="text-black">¿Ya posees una cuenta? </Text>
-                                <TouchableOpacity onPress={() => navigation.push('ElibLogin')}>
+                                <TouchableOpacity onPress={() => navigation.replace('ElibLogin')}>
                                     <Text className="text-green-600">Acceder</Text>
                                 </TouchableOpacity>
                             </Animated.View>

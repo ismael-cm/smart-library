@@ -34,7 +34,7 @@ export default function ElibHome({ navigation }) {
 
                 if (storedToken) {
                     setToken(storedToken); // Usar useState para actualizar el token
-                    fetchBooksByGenres(storedToken, '672994cf811472689b543cb6'); // Llamar a la función para obtener libros
+                    fetchBooksByGenres(storedToken); // Llamar a la función para obtener libros
                 }
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
@@ -45,7 +45,7 @@ export default function ElibHome({ navigation }) {
     }, []);
 
     // Función para obtener libros desde el backend por género
-    const fetchBooksByGenres = async (authToken, genreId) => {
+    const fetchBooksByGenres = async (authToken) => {
         try {
             const response = await axios.get(`${SERVER_URL}api/books/genre`, {
                 headers: { Authorization: `Bearer ${authToken}` },
@@ -84,7 +84,7 @@ export default function ElibHome({ navigation }) {
             </View>
             <TouchableOpacity
                 className="ml-4 w-[115%] h-full absolute"
-                onPress={() => navigation.navigate('ElibBook', { book: item })}
+                onPress={() => navigation.navigate('ElibBook', { bookParam: item })}
             ></TouchableOpacity>
         </View>
     );
