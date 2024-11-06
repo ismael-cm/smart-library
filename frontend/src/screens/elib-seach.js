@@ -67,7 +67,7 @@ export default function ElibSearch({ navigation }) {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     title: searchQuery,
-                    genre: selectedGenre,
+                    genre_id: selectedGenre,
                     author: searchAuthor,
                 },
             });
@@ -87,14 +87,17 @@ export default function ElibSearch({ navigation }) {
     };
 
     const renderBookItem = ({ item }) => (
-        <View className="w-36 h-full p-6 pr-1 pt-0 pb-0 relative">
+        <TouchableOpacity
+            onPress={() => navigation.navigate('ElibBook', { book: item })}
+            className="w-36 h-full p-6 pr-1 pt-0 pb-0 relative"
+        >
             <View className="rounded-xl h-40 w-full shadow-xl">
                 <Image
                     className="rounded-xl h-40 w-full"
                     source={
                         item.image
                             ? { uri: item.image }
-                            : getDefaultImage() // Usa la imagen predeterminada correctamente
+                            : getDefaultImage()
                     }
                     onError={() => handleImageError(item.isbn)}
                 />
@@ -103,8 +106,9 @@ export default function ElibSearch({ navigation }) {
                 <Text className="my-2 font-semibold">{item.title}</Text>
                 <Text className="font-thin text-sm">{item.author}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
+    
 
     return (
         <View className="bg-gray-100 flex-1 w-full p-8">

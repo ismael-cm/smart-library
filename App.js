@@ -9,6 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ElibProfile from './frontend/src/screens/elib-profile';
 import Tabs from './frontend/src/components/tabs';
 import ElibSearch from './frontend/src/screens/elib-seach';
+import ElibBook from './frontend/src/screens/elib-book';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ function App() {
           <Stack.Screen name="ElibRegister" component={ElibRegister} />
           <Stack.Screen name="ElibLogin" component={ElibLogin} />
           <Stack.Screen name="ElibSearch" component={ElibSearch} />
+          <Stack.Screen name="ElibBook" component={ElibBook}/>
           <Stack.Screen name="Tabs" component={Tabs} />
         </Stack.Navigator>
       </NavigationContainer>
