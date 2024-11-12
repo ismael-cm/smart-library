@@ -99,7 +99,7 @@ export default function ElibHome({ navigation }) {
                 <View className="flex flex-row items-end w-full h-48">
                     <View className="w-fit mb-6">
                         <Text className="text-green-400 text-lg font-semibold w-32">
-                            Good Afternoon, 
+                            Bienvenido, 
                         </Text>
                         <Text className="text-black font-semibold text-xl">
                             {name}
@@ -133,7 +133,6 @@ export default function ElibHome({ navigation }) {
                         <View className="flex flex-row items-center">
                             <Text className="font-semibold text-xl">{genre.genre.description}</Text>
                             <TouchableOpacity className="absolute right-0">
-                            <Text className="text-orange-600">Ver todo</Text>
                             </TouchableOpacity>
                         </View>
                         <FlatList

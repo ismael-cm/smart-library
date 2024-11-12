@@ -7,10 +7,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { SERVER_URL } from '@env';
 
+
 export default function ElibLogin() {
     const navigation = useNavigation();
     const [Email, setEmail] = useState('bea@b.com');
     const [Password, setPassword] = useState('1234');
+    const [userType, setUserType] = useState([]);
     const [Errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -24,7 +26,16 @@ export default function ElibLogin() {
 
             if (response.data.token) {
                 await storeToken(response.data.token, response.data.user.name);
-                navigation.replace('Tabs'); // Cambiado a replace para evitar volver atrás
+                setUserType(response.data.user.type);
+                console.log(response.data.user.type);
+                // Redirige a la pantalla correspondiente
+                if (response.data.user.type === 'student') {
+                    navigation.replace('Tabs');
+                } else if (response.data.user.type === 'librarian') {
+                    navigation.replace('TabsLibrarian');
+                }
+
+                //navigation.replace('Tabs'); // Cambiado a replace para evitar volver atrás
             }
         } catch (error) {
             setErrors([error.response.data.message]);

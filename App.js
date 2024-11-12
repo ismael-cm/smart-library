@@ -10,20 +10,27 @@ import ElibProfile from './frontend/src/screens/elib-profile';
 import Tabs from './frontend/src/components/tabs';
 import ElibSearch from './frontend/src/screens/elib-seach';
 import ElibBook from './frontend/src/screens/elib-book';
+import ElibLibrarianHome from './frontend/src/screens/ElibLibrarianHome';
+import TabsLibrarian from './frontend/src/components/tabsLibrarian';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function App() {
+
+  const [userType, setUserType] = React.useState(null);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='ElibLogin' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName={userType === null ? 'ElibLogin' : (userType === 'student' ? 'Tabs' : 'TabsLibrarian')} screenOptions={{ headerShown: false }}>
           <Stack.Screen name="ElibRegister" component={ElibRegister} />
           <Stack.Screen name="ElibLogin" component={ElibLogin} />
           <Stack.Screen name="ElibSearch" component={ElibSearch} />
-          <Stack.Screen name="ElibBook" component={ElibBook}/>
+          <Stack.Screen name="ElibBook" component={ElibBook} />
           <Stack.Screen name="Tabs" component={Tabs} />
+          <Stack.Screen name="TabsLibrarian" component={TabsLibrarian} />
+          <Stack.Screen name="ElibLibrarianHome" component={ElibLibrarianHome} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
