@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Alert, Modal, TextInput, Button } from 'react-native';
-import { SERVER_URL } from '@env';
+import { BASE_URL } from '@env';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
@@ -65,7 +65,7 @@ export default function ElibBook({ navigation, route }) {
 
     const getUser = async (token) => {
         try {
-            const response = await axios.get(`${SERVER_URL}api/profile`, {
+            const response = await axios.get(`${BASE_URL}api/profile`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 200) {
@@ -79,7 +79,7 @@ export default function ElibBook({ navigation, route }) {
 
     const getBook = async (token) => {
         try {
-            const response = await axios.get(`${SERVER_URL}api/books/${bookParam._id}`, {
+            const response = await axios.get(`${BASE_URL}api/books/${bookParam._id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 200) {
@@ -106,7 +106,7 @@ export default function ElibBook({ navigation, route }) {
         setIsSaving(true);
         try {
             const response = await axios.post(
-                `${SERVER_URL}api/loans/create`,
+                `${BASE_URL}api/loans/create`,
                 {
                     userId: user._id,
                     bookId: book._id,
@@ -160,7 +160,7 @@ export default function ElibBook({ navigation, route }) {
         setIsSaving(true);
         try {
             const response = await axios.post(
-                `${SERVER_URL}api/reservations/create`,
+                `${BASE_URL}api/reservations/create`,
                 {
                     userId: user._id,
                     bookId: book._id,

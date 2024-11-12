@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, Alert, Image } from 'react-nati
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { SERVER_URL } from '@env';
+import { BASE_URL } from '@env';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function ElibLoanManagement() {
@@ -30,7 +30,7 @@ export default function ElibLoanManagement() {
 
     const fetchLoans = async (authToken) => {
         try {
-            const response = await axios.get(`${SERVER_URL}api/loans/user`, {
+            const response = await axios.get(`${BASE_URL}api/loans/user`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             setLoans(response.data);
@@ -51,7 +51,7 @@ export default function ElibLoanManagement() {
 
     const fetchReservations = async (authToken) => {
         try {
-            const response = await axios.get(`${SERVER_URL}api/reservations/user`, {
+            const response = await axios.get(`${BASE_URL}api/reservations/user`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             setReservations(response.data);

@@ -5,7 +5,7 @@ import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { SERVER_URL } from '@env';
+import { BASE_URL } from '@env';
 
 export default function ElibLogin() {
     const navigation = useNavigation();
@@ -17,17 +17,24 @@ export default function ElibLogin() {
     const handleLogin = async () => {
         try {
             setLoading(true);
-            const response = await axios.post(`${SERVER_URL}api/login`, {
+            const response = await axios.post(`${BASE_URL}api/login`, {
                 email: Email,
                 password: Password,
             });
 
-            if (response.data.token) {
+            /*if (response.data.token) {
                 await storeToken(response.data.token, response.data.user.name);
                 navigation.replace('Tabs'); // Cambiado a replace para evitar volver atrás
+            }*/
+
+            if (response.status === 200 && response.data.token){
+                await storeToken(response.data.token, response.data.user.id, response.data.user.name,response.data.user.email, response.data.user.carnet);
+                navigation.replace('Tabs');
             }
         } catch (error) {
-            setErrors([error.response.data.message]);
+            alert(error)
+            //setErrors([error.response.data.message]);
+            //console.error(error)
         } finally {
             setLoading(false);
         }
@@ -48,10 +55,13 @@ export default function ElibLogin() {
         checkToken();
     }, []);
 
-    const storeToken = async (token, username) => {
+    const storeToken = async (token,  userId, userName,userEmail, userCarnet) => {
         try {
             await AsyncStorage.setItem('authToken', token);
-            await AsyncStorage.setItem('username', username);
+            await AsyncStorage.setItem('userid', userId);
+            await AsyncStorage.setItem('name', userName);
+            await AsyncStorage.setItem('correo', userEmail);
+            await AsyncStorage.setItem('carnet', userCarnet);
         } catch (error) {
             console.log('Error saving token:', error);
         }
