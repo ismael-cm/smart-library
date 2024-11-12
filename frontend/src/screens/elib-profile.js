@@ -1,18 +1,40 @@
-import { View, Text, Image, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, Alert, ScrollView, Modal, Button } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { SERVER_URL } from '@env';
+import { BASE_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { BlurView } from 'expo-blur';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 
 export default function ElibProfile({ navigation }) {
     const [user, setUser] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [name, setName] = useState(null);
+    const [carnet, setCarnet] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
+    const showAlert = () => {
+        setModalVisible(true);
+    };
+
+    const onGestureEvent = (event) => {
+        if (event.nativeEvent.translationY > 100) {
+          setModalVisible(false);
+        }
+    };
    
+    const handleConfirm = () => {
+        updateUserData();
+    };
+
+    const handleCancel = () => {
+        setModalVisible(false);
+    };
 
     useEffect(() => {
         const loadData = async () => {
@@ -21,23 +43,75 @@ export default function ElibProfile({ navigation }) {
                 console.log(`Token para 22222 ${token}`);
                 await getUser(token);
             } catch (error) {
-                alert(error.response?.data?.message || 'Error al obtener los datos');
+                //alert(error.response?.data?.message || 'Error al obtener los datos');
                 console.error('Error al obtener los datos del usuario:', error);
             }
         };
         loadData();
     }, []);
 
-    const getUser = async (token) => {
+    const getUser = async () => {
         try {
-            const response = await axios.get(`${SERVER_URL}api/profile`, {
+            const nameStored = await AsyncStorage.getItem('name');
+            const emailStored = await AsyncStorage.getItem('correo');
+            const carnetStored = await AsyncStorage.getItem('carnet');
+            var userData = {
+                name: nameStored,
+                email:emailStored,
+                carnet: carnetStored,
+                visits: 100,
+                readingCount: 4,
+                location: "El Salvador"
+            }
+
+            setUser(userData);
+            setEmail(emailStored)
+            setName(nameStored)
+            setCarnet(carnetStored)
+
+
+        } catch (error) {
+            console.error('Error al obtener los datos del usuario:', error);
+        }
+    };
+
+    const updateUserData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('authToken');
+            const userID = await AsyncStorage.getItem('userid');
+            const response = await axios.put(`${BASE_URL}api/update/${userID}`, {
+                name: name,
+                email: email,
+                carnet: carnet
+            }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
+
             if (response.status === 200) {
-                setUser(response.data.user);
+                setEmail(user.email)
+                setName(user.name)
+                setCarnet(user.carnet)
+
+                var userData = {
+                    name: response.data.user.name,
+                    email: response.data.user.email,
+                    carnet: response.data.user.carnet,
+                    visits: 100,
+                    readingCount: 4,
+                    location: "El Salvador"
+                }
+                setUser(userData);
+
+
+                await AsyncStorage.setItem('name', user.name);
+                await AsyncStorage.setItem('correo', user.email);
+                await AsyncStorage.setItem('carnet', user.carnet);
+
+                alert("Usuario Actualizado")
+                setModalVisible(false);
             }
         } catch (error) {
-            alert(error.response?.data?.message || 'Error al obtener los datos del usuario');
+            //alert(error.response?.data?.message || 'Error al obtener los datos del usuario');
             console.error('Error al obtener los datos del usuario:', error);
         }
     };
@@ -50,6 +124,81 @@ export default function ElibProfile({ navigation }) {
     return (
         <View className="bg-white h-full w-full">
             <StatusBar style='dark' />
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <BlurView 
+                intensity={50} 
+                className='flex relative bg-black/30 w-full h-full items-center items-around'>
+                    <PanGestureHandler onGestureEvent={onGestureEvent}>
+                        <View className='flex w-full absolute bg-white/50 h-2/3 mt-2/3 rounded-3xl p-5 shadow-xl bottom-0'>
+                            
+                            
+
+                            <View  className='w-full p-2 bg-white h-fit p-2 pr-6 pl-6 rounded-2xl '>
+                                <Text >
+                                    Correo
+                                </Text>
+                                <View  className='w-full p-2 my-2 bg-gray-100 h-fit p-2 pr-6 pl-6 rounded-2xl '>
+                                    <TextInput 
+                                        className="flex flex-row align-center justify-center p-3 mb-3"
+                                        placeholder="Correo aquí"
+                                        value={email}
+                                        onChangeText={setEmail}
+                                        >
+                                    </TextInput>
+                                </View>
+                                <Text >
+                                    Nombre
+                                </Text>
+                                <View  className='w-full p-2 my-2 bg-gray-100 h-fit p-2 pr-6 pl-6 rounded-2xl '>
+                                    <TextInput 
+                                        className="flex flex-row align-center justify-center p-3 mb-3"
+                                        placeholder="Correo aquí"
+                                        value={name}
+                                        onChangeText={setName}
+                                        >
+                                    </TextInput>
+                                </View>
+                                <Text >
+                                    Carnet
+                                </Text>
+                                <View  className='w-full p-2 my-2 bg-gray-100 h-fit p-2 pr-6 pl-6 rounded-2xl '>
+                                    <TextInput 
+                                        className="flex flex-row align-center justify-center p-3 mb-3"
+                                        placeholder="Correo aquí"
+                                        value={carnet}
+                                        onChangeText={setCarnet}
+                                        >
+                                    </TextInput>
+                                </View>
+                                <View className='w-full p-2 h-fit p-2'>
+                                    <TouchableOpacity className="flex flex-row align-center justify-center bg-green-400 p-3 rounded-2xl mb-3" onPress={handleConfirm}>
+                                        <Text  className="text-lg font-bold text-white text-center mr-4">
+                                            Guardar 
+                                        </Text>
+                                        {/*<Icon  name="logout" size={30} color="white"/>*/}
+                                    </TouchableOpacity>
+                                </View>
+                                <View className='w-full p-2 h-fit p-2'>
+                                    <TouchableOpacity className="flex flex-row align-center justify-center bg-gray-600 p-3 rounded-2xl mb-3" onPress={handleCancel}>
+                                        <Text  className="text-lg font-bold text-white text-center mr-4">
+                                            Cancelar 
+                                        </Text>
+                                        {/*<Icon  name="logout" size={30} color="white"/>*/}
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </PanGestureHandler>
+                </BlurView>
+            </Modal>
+
+
             <View className="bg-white w-full h-full">
                 <Animated.View entering={FadeInDown.duration(800).springify()} className="flex flex-row h-60 w-full shadow-xl justify-end items-end">
                     <View className="w-1/3 h-32 justify-center items-center">
@@ -89,18 +238,20 @@ export default function ElibProfile({ navigation }) {
                    
 
                 </View>
-                <View className="w-full h-fit p-2 pr-6 pl-6">
-                    <View className="w-full h-32 bg-green-400 rounded-3xl shadow-xl">
-                        {/* Aquí puedes agregar más información del usuario si es necesario */}
-                    </View>
-                </View>
+                <Animated.View  entering={FadeInDown.delay(400).duration(1000).springify()} className='w-full p-2 h-fit p-2 pr-6 pl-6'>
+                    <TouchableOpacity className="flex flex-row align-center justify-center w-fit bg-green-400 p-3 rounded-2xl mb-3" onPress={showAlert}>
+                        <Text  className="text-lg font-bold text-white text-center mr-4">
+                            Editar Perfil 
+                        </Text>
+                    </TouchableOpacity>
+                </Animated.View>
 
-                <Animated.View  entering={FadeInDown.delay(400).duration(1000).springify()} className='w-full my-2 p-2 h-fit p-2 pr-6 pl-6'>
+                <Animated.View  entering={FadeInDown.delay(400).duration(1000).springify()} className='w-full p-2 h-fit p-2 pr-6 pl-6'>
                     <TouchableOpacity className="flex flex-row align-center justify-center w-fit bg-red-600 p-3 rounded-2xl mb-3" onPress={handleLogout}>
                         <Text  className="text-lg font-bold text-white text-center mr-4">
                             Cerrar Sesión 
                         </Text>
-                        <Icon  name="logout" size={30} color="white"/>
+                        {/*<Icon  name="logout" size={30} color="white"/>*/}
                     </TouchableOpacity>
                 </Animated.View>
                 <View className="h-fit w-full p-6">

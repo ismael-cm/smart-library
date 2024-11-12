@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'; // Asegúrate de tener axios instalado
-import { SERVER_URL } from '@env';
+import { BASE_URL } from '@env';
 import { getDefaultImage } from '../components/defaultImages'
 
 
@@ -47,7 +47,7 @@ export default function ElibHome({ navigation }) {
     // Función para obtener libros desde el backend por género
     const fetchBooksByGenres = async (authToken) => {
         try {
-            const response = await axios.get(`${SERVER_URL}api/books/genre`, {
+            const response = await axios.get(`${BASE_URL}api/books/genre`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             setGenres(response.data);
