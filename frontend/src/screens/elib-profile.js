@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { BASE_URL } from '@env';
+import { SERVER_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { BlurView } from 'expo-blur';
@@ -79,7 +79,10 @@ export default function ElibProfile({ navigation }) {
         try {
             const token = await AsyncStorage.getItem('authToken');
             const userID = await AsyncStorage.getItem('userid');
-            const response = await axios.put(`${BASE_URL}api/update/${userID}`, {
+
+            console.log(SERVER_URL)
+
+            const response = await axios.put(`${SERVER_URL}api/update/${userID}`, {
                 name: name,
                 email: email,
                 carnet: carnet
@@ -87,6 +90,7 @@ export default function ElibProfile({ navigation }) {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
+            console.log(response)
             if (response.status === 200) {
                 setEmail(user.email)
                 setName(user.name)

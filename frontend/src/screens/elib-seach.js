@@ -11,7 +11,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
-import { BASE_URL } from '@env';
+import { SERVER_URL } from '@env';
 import { Picker } from '@react-native-picker/picker';
 import { getDefaultImage } from '../components/defaultImages';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -52,7 +52,7 @@ export default function ElibSearch({ navigation }) {
 
     const fetchGenres = async (authToken) => {
         try {
-            const response = await axios.get(`${BASE_URL}api/genres`, {
+            const response = await axios.get(`${SERVER_URL}api/genres`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             setGenres(response.data.map((genre) => ({ label: genre.description, value: genre._id })));
@@ -64,7 +64,7 @@ export default function ElibSearch({ navigation }) {
     const searchBooks = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}api/books/filter`, {
+            const response = await axios.get(`${SERVER_URL}api/books/filter`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     title: searchQuery,

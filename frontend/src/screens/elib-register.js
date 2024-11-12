@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { BASE_URL } from '@env';
+import { SERVER_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ElibRegister() {
@@ -31,13 +31,15 @@ export default function ElibRegister() {
         }
         setLoading(true);
         try {
+            console.log(SERVER_URL)
             // Enviar la solicitud POST al backend
-            const response = await axios.post(`${BASE_URL}api/register`, {
+            const response = await axios.post(`${SERVER_URL}api/register`, {
                 name: Name,
                 carnet: Carnet,
                 email: Email,
                 password: Password,
             });
+
 
             // Manejar la respuesta exitosa
             if (response.status === 201) {

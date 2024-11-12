@@ -5,7 +5,7 @@ import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { BASE_URL } from '@env';
+import { SERVER_URL } from '@env';
 
 export default function ElibLogin() {
     const navigation = useNavigation();
@@ -16,8 +16,9 @@ export default function ElibLogin() {
 
     const handleLogin = async () => {
         try {
+            console.log(SERVER_URL)
             setLoading(true);
-            const response = await axios.post(`${BASE_URL}api/login`, {
+            const response = await axios.post(`${SERVER_URL}api/login`, {
                 email: Email,
                 password: Password,
             });
